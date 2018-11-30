@@ -1,11 +1,11 @@
-public class ArrayDeque<T>{
+public class ArrayDeque<T> {
 	private T[] items;
 	private int size;
 	private int nextFirst;
 	private int nextLast;
 	private static final int INITIAL_CAPACITY = 8;
 
-	public ArrayDeque(){
+	public ArrayDeque() {
 		items = (T[]) new Object[INITIAL_CAPACITY];
 		size = 0;
 		nextFirst = 0;
@@ -13,47 +13,47 @@ public class ArrayDeque<T>{
 	}
 
 //Figure out negative number mod 8 to get the change to nextFrist and nextLast,
-	private int minusOne(int index){
+	private int minusOne(int index) {
 		return Math.floorMod(index - 1, items.length);
 	}
 
-	private int plusOne(int index){
+	private int plusOne(int index) {
 		return Math.floorMod(index + 1, items.length);
 	}
 
-	private int plusOne(int index, int size){
+	private int plusOne(int index, int size) {
 		return Math.floorMod(index + 1, size);
 	}
 
-	private int plusIndex(int firstIndex, int secondIndex){
+	private int plusIndex(int firstIndex, int secondIndex) {
 		return Math.floorMod(firstIndex + secondIndex, items.length);
 	}
 
-	public int size(){
+	public int size() {
 		return size;
 	}
 
-	public int capacity(){
+	private int capacity() {
 		return items.length;
 	}
 
-	private void extend(){
+	private void extend() {
 		resize(size() * 2);
 	}
 
-	private void shrink(){
+	private void shrink() {
 		resize(items.length / 2);
 	}
 
-	public boolean isFull(){
+	private boolean isFull() {
 		return size() == items.length;
 	}
 
-	public boolean isSparse(){
+	private boolean isSparse() {
 		return items.length >= 16 && size() < items.length / 4;
 	}
 
-	private void resize(int target){
+	private void resize(int target) {
 		System.out.printf("Resizing from %5d to %5d\n",items.length, target);
 		T[] oldItems = items;
 		int oldFirst = plusOne(nextFirst);
@@ -70,8 +70,8 @@ public class ArrayDeque<T>{
 		nextLast = plusOne(nextLast);
 	}
 
-	public void addFirst(T item){
-		if(isFull()){
+	public void addFirst(T item) {
+		if(isFull()) {
 			extend();
 		}
 		items[nextFirst] = item;
@@ -79,8 +79,8 @@ public class ArrayDeque<T>{
 		size++;
 	}
 
-	public void addLast(T item){
-		if(isFull()){
+	public void addLast(T item) {
+		if(isFull()) {
 			extend();
 		}
 		items[nextLast] = item;
@@ -88,12 +88,15 @@ public class ArrayDeque<T>{
 		size++;
 	}
 
-	public boolean isEmpty(){
-		return minusOne(nextLast) == nextFirst;
-	}
+	public boolean isEmpty() {
+        if (this.size == 0) {
+            return true;
+        }
+        return false;
+    }
 
-	public T removeFirst(){
-		if(isSparse()){
+	public T removeFirst() {
+		if(isSparse()) {
 			shrink();
 		}
 		nextFirst = plusOne(nextFirst);
@@ -103,8 +106,8 @@ public class ArrayDeque<T>{
 		return removeItem;
 	}
 
-	public T removeLast(){
-		if(isSparse()){
+	public T removeLast() {
+		if(isSparse()) {
 			shrink();
 		}
 		nextLast = minusOne(nextLast);
@@ -114,40 +117,14 @@ public class ArrayDeque<T>{
 		return removeItem;
 	}
 
-	public T get(int index){
+	public T get(int index) {
 		return items[plusIndex(nextFirst + 1, index)];
 	}
 
-	public void printDeque(){
-		for(int i = plusOne(nextFirst); i != nextLast; i = plusOne(i)){
+	public void printDeque() {
+		for(int i = plusOne(nextFirst); i != nextLast; i = plusOne(i)) {
 			System.out.print(items[i] + " ");
 		}
 	}
-
-    public static void main(String[] args) {
-    	ArrayDeque<Integer> a = new ArrayDeque<>();
-    	for (int i = 0; i < 10000; i++) {
-            a.addFirst(0);
-        }
-        for (int i = 0; i < 9999; i++) {
-            a.removeLast();
-        }
-
-        System.out.println(a.size());
-        System.out.println(a.capacity());
-
-        ArrayDeque<Integer> intArr = new ArrayDeque<>();
-        intArr.addLast(3);
-        intArr.addFirst(2);
-        intArr.addLast(4);
-        intArr.addFirst(1);   
-        intArr.addLast(5);     
-        intArr.addFirst(0);
-        intArr.addLast(6);
-        intArr.removeFirst();
-        intArr.removeLast();
-       	intArr.printDeque();
-
-    }
-
+  
 }

@@ -64,7 +64,7 @@ public class LinkedListDeque<T> {
 	}
 
 	public T removeFirst() {
-		if (size == 0){
+		if (size == 0) {
 			return null;
 		}
 		T removeItem = sentinel.next.item;
